@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --color-ink: #12231C;
+  --color-paper: #EEF0E8;
+  --color-surface: #FFFFFF;
+  --color-kraft: #D9CDA9;
+  --color-brand: #146B4E;
+  --color-brand-soft: #E3F0E9;
+  --color-gold: #B9822A;
+  --color-gold-soft: #F6ECD8;
+  --color-red: #B33A3A;
+  --color-red-soft: #F8E7E5;
+  --color-blue: #2F5FA8;
+  --color-blue-soft: #E8EEF7;
+  --color-muted: #5B675E;
+  --color-card-border: #E2E5DD;
+}
+
+:root {
+  --ink: #12231C;
+  --paper: #EEF0E8;
+  --surface: #FFFFFF;
+  --kraft: #D9CDA9;
+  --brand: #146B4E;
+  --brand-soft: #E3F0E9;
+  --gold: #B9822A;
+  --gold-soft: #F6ECD8;
+  --red: #B33A3A;
+  --red-soft: #F8E7E5;
+  --blue: #2F5FA8;
+  --blue-soft: #E8EEF7;
+  --muted: #5B675E;
+  --border: #E2E5DD;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #EEF0E8;
+  color: #12231C;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono, .mono-data {
+  font-family: var(--font-mono);
+}
+
+/* Accessibility Focus Ring */
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #146B4E;
+  outline-offset: 2px;
+}
+
+/* Custom Manifest subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EEF0E8;
+}
+::-webkit-scrollbar-thumb {
+  background: #D9CDA9;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5B675E;
+}
+
+

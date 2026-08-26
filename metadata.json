@@ -1,0 +1,6 @@
+{
+  "name": "STEKENTSTORECRM",
+  "description": "STEKENTSTORECRM - Order management, stock control, and round-robin sales rep auto-dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

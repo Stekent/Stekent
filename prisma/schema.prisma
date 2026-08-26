@@ -1,0 +1,166 @@
+// Prisma Schema for CRM Order & Stock Hub
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  admin
+  sales_rep
+  inventory_manager
+}
+
+enum OrderStatus {
+  New
+  Confirmed
+  Dispatched
+  Delivered
+  Cancelled
+}
+
+enum Platform {
+  facebook
+  instagram
+  tiktok
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          Role
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  assignedOrders   Order[]              @relation("AssignedRep")
+  statusChanges    OrderStatusHistory[]
+  expenses         Expense[]
+}
+
+model Product {
+  id                 String   @id @default(uuid())
+  name               String
+  sku                String   @unique
+  costPrice          Decimal
+  sellingPrice       Decimal
+  currency           String   @default("NGN")
+  stockQty           Int
+  lowStockThreshold  Int
+  createdAt          DateTime @default(now())
+
+  orderItems OrderItem[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String
+  email     String?
+  address   String?
+  createdAt DateTime @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  orderNumber    String      @unique
+  customerId     String
+  customer       Customer    @relation(fields: [customerId], references: [id])
+  assignedRepId  String?
+  assignedRep    User?       @relation("AssignedRep", fields: [assignedRepId], references: [id])
+  status         OrderStatus @default(New)
+  totalAmount    Decimal
+  source         String?
+  campaignId     String?
+  campaign       Campaign?   @relation(fields: [campaignId], references: [id])
+  adClickId      String?
+  adClick        AdClick?    @relation(fields: [adClickId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  items            OrderItem[]
+  statusHistory     OrderStatusHistory[]
+  conversionEvents  AdConversionEvent[]
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id])
+  productId  String
+  product    Product @relation(fields: [productId], references: [id])
+  qty        Int
+  unitPrice  Decimal
+}
+
+model OrderStatusHistory {
+  id          String   @id @default(uuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  status      String
+  note        String?
+  changedById String
+  changedBy   User     @relation(fields: [changedById], references: [id])
+  changedAt   DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  description String
+  amount      Decimal
+  category    String
+  date        DateTime
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+}
+
+model Campaign {
+  id           String   @id @default(uuid())
+  name         String
+  platform     Platform
+  utmCampaign  String
+  dailyBudget  Decimal?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  clicks AdClick[]
+  orders Order[]
+}
+
+model AdClick {
+  id          String    @id @default(uuid())
+  campaignId  String?
+  campaign    Campaign? @relation(fields: [campaignId], references: [id])
+  platform    Platform
+  fbclid      String?
+  ttclid      String?
+  ctwaClid    String?
+  phone       String?
+  landingUrl  String?
+  clickedAt   DateTime  @default(now())
+
+  orders Order[]
+}
+
+model AdConversionEvent {
+  id             String   @id @default(uuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id])
+  platform       Platform
+  eventName      String
+  sentAt         DateTime @default(now())
+  success        Boolean
+  responseBody   String?
+}
+
+model RoundRobinState {
+  id                Int      @id @default(1)
+  lastAssignedRepId String?
+  updatedAt         DateTime @updatedAt
+}
