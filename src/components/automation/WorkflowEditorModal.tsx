@@ -567,7 +567,7 @@ export const WorkflowEditorModal: React.FC<WorkflowEditorModalProps> = ({
                 <label className="block text-xs text-slate-400 mb-1">When this happens:</label>
                 <select
                   value={workflow.trigger}
-                  onChange={e => setWorkflow({ ...workflow, trigger: e.target.value as WorkflowTrigger })}
+                  onChange={e => setWorkflow({ ...workflow, trigger: e.target.value as WorkflowTriggerType })}
                   className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-emerald-500"
                 >
                   {TRIGGER_OPTIONS.map(opt => (
